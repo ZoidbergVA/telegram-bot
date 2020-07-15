@@ -35,3 +35,6 @@ build/
 
 ### Mvn ###
 .mvn
+
+### Data ###
+data
