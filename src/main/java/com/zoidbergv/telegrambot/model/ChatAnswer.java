@@ -1,8 +1,7 @@
 package com.zoidbergv.telegrambot.model;
 
-import java.util.Set;
+import java.time.LocalDateTime;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,8 +9,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
@@ -23,20 +20,22 @@ public class ChatAnswer {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = {}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "chat_id", nullable = false)
 	private Chat chat;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = {}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "question_id", nullable = false)
 	private Question question;
 
-	@ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinTable(name = "chat_answer_answer", joinColumns = @JoinColumn(name = "chat_answer_id"), inverseJoinColumns = @JoinColumn(name = "answer_id"))
-	private Set<Answer> answer;
-
-	@Column(name = "answer_text", nullable = true)
-	private String answerText;
+	@Column(name = "answer_text", nullable = false)
+	private String text;
+	
+	@Column(name = "answer_weight", nullable = false)
+	private Integer weight;
+	
+	@Column(name = "date_created", nullable = false)
+	private LocalDateTime dateCreated;
 
 	public Integer getId() {
 		return id;
@@ -62,20 +61,28 @@ public class ChatAnswer {
 		this.question = question;
 	}
 
-	public Set<Answer> getAnswer() {
-		return answer;
+	public String getText() {
+		return text;
 	}
 
-	public void setAnswer(Set<Answer> answer) {
-		this.answer = answer;
+	public void setText(String answerText) {
+		this.text = answerText;
 	}
 
-	public String getAnswerText() {
-		return answerText;
+	public Integer getWeight() {
+		return weight;
 	}
 
-	public void setAnswerText(String answerText) {
-		this.answerText = answerText;
+	public void setWeight(Integer weight) {
+		this.weight = weight;
+	}
+
+	public LocalDateTime getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(LocalDateTime dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 
 	@Override
@@ -105,7 +112,7 @@ public class ChatAnswer {
 
 	@Override
 	public String toString() {
-		return "ChatAnswer [id=" + id + ", answerText=" + answerText + "]";
+		return "ChatAnswer [id=" + id + ", text=" + text + ", weight=" + weight + ", dateCreated=" + dateCreated + "]";
 	}
 
 }

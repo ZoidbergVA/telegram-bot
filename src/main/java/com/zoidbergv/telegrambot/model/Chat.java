@@ -2,7 +2,6 @@ package com.zoidbergv.telegrambot.model;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,15 +18,24 @@ public class Chat {
 	@Id
 	private Long id;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@ManyToOne(cascade = {}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "last_answered_question_id", nullable = true)
 	private Question lastAnsweredQuestion;
-	
-	@Column(name = "completed_count", nullable = true)
-	private Integer completedCount;
 
-	@OneToMany(mappedBy = "chat", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(mappedBy = "chat", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<ChatAnswer> chatAnswers;
+
+	@Column(name = "first_name", nullable = true)
+	private String firstName;
+
+	@Column(name = "last_name", nullable = true)
+	private String lastName;
+
+	@Column(name = "user_name", nullable = true)
+	private String userName;
+	
+	@Column(name = "reported", nullable = false)
+	private Boolean reported;
 	
 	public Long getId() {
 		return id;
@@ -45,20 +53,44 @@ public class Chat {
 		this.lastAnsweredQuestion = lastAnsweredQuestion;
 	}
 
-	public Integer getCompletedCount() {
-		return completedCount;
-	}
-
-	public void setCompletedCount(Integer completedCount) {
-		this.completedCount = completedCount;
-	}
-
 	public Set<ChatAnswer> getChatAnswers() {
 		return chatAnswers;
 	}
 
 	public void setChatAnswers(Set<ChatAnswer> chatAnswers) {
 		this.chatAnswers = chatAnswers;
+	}
+
+	public String getFirstName() {
+		return firstName;
+	}
+
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
+
+	public String getLastName() {
+		return lastName;
+	}
+
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public Boolean getReported() {
+		return reported;
+	}
+
+	public void setReported(Boolean reported) {
+		this.reported = reported;
 	}
 
 	@Override
@@ -88,7 +120,8 @@ public class Chat {
 
 	@Override
 	public String toString() {
-		return "Chat [id=" + id + ", completedCount=" + completedCount + "]";
+		return "Chat [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", userName=" + userName
+				+ ", reported=" + reported + "]";
 	}
-	
+
 }

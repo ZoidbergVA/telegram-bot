@@ -2,9 +2,10 @@ package com.zoidbergv.telegrambot.model;
 
 import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,22 +23,17 @@ public class Question {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(name = "text", nullable = false)
+	@Column(name = "question_text", nullable = false)
 	private String text;
 
-	@Column(name = "type", nullable = false, columnDefinition = "smallint")
-	private QuestionType questionType;
-
-	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	private Set<Answer> answers;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "type", nullable = false)
+	private QuestionType type;
 	
-	@OneToMany(mappedBy = "nextQuestion", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	private Set<Answer> possiblePreviousAnswers;
-
-	@OneToMany(mappedBy = "lastAnsweredQuestion", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(mappedBy = "lastAnsweredQuestion", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<Chat> currentChats;
 	
-	@OneToMany(mappedBy = "question", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(mappedBy = "question", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<ChatAnswer> chatAnswers;
 	
 	public Integer getId() {
@@ -56,28 +52,12 @@ public class Question {
 		this.text = text;
 	}
 
-	public QuestionType getQuestionType() {
-		return questionType;
+	public QuestionType getType() {
+		return type;
 	}
 
-	public void setQuestionType(QuestionType questionType) {
-		this.questionType = questionType;
-	}
-
-	public Set<Answer> getPossiblePreviousAnswers() {
-		return possiblePreviousAnswers;
-	}
-
-	public void setPossiblePreviousAnswers(Set<Answer> possiblePreviousAnswers) {
-		this.possiblePreviousAnswers = possiblePreviousAnswers;
-	}
-
-	public Set<Answer> getAnswers() {
-		return answers;
-	}
-
-	public void setAnswers(Set<Answer> answers) {
-		this.answers = answers;
+	public void setType(QuestionType type) {
+		this.type = type;
 	}
 
 	public Set<Chat> getCurrentChats() {
@@ -123,7 +103,7 @@ public class Question {
 
 	@Override
 	public String toString() {
-		return "Question [id=" + id + ", text=" + text + ", questionType=" + questionType + "]";
+		return "Question [id=" + id + ", text=" + text + ", type=" + type + "]";
 	}
 
 }
