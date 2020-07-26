@@ -38,3 +38,4 @@ build/
 
 ### Data ###
 data
+/logs/
