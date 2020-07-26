@@ -9,6 +9,8 @@ import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ByteArrayResource;
@@ -28,6 +30,8 @@ import jxl.write.WriteException;
 
 @Component
 public class ReportService {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(ReportService.class);
 
 	@Value("${mail.to-address}")
 	private String toAddress;
@@ -106,31 +110,9 @@ public class ReportService {
 			workbook.write();
 			workbook.close();
 		} catch (IOException | WriteException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getLocalizedMessage(), e.getCause());
 		}
 		return outputStream;
 	}
-
-//	public ByteArrayOutputStream generateOds(List<Chat> chats) {
-//		try {
-//			int rows = chats.size() + 1;
-//			int columns = 7;
-//			Sheet sheet = new Sheet("Report", rows, columns);
-//
-//			sheet.getRange(0, 0, 1, 7).setValues("Name", QuestionType.AGGRESSIVE.name(),
-//					QuestionType.AGGRESSIVE.name() + "%", QuestionType.ASSERTIVE.name(),
-//					QuestionType.ASSERTIVE.name() + "%", QuestionType.PASSIVE.name(),
-//					QuestionType.PASSIVE.name() + "%");
-//
-//			SpreadSheet spreadSheet = new SpreadSheet();
-//			spreadSheet.appendSheet(sheet);
-//			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-//			spreadSheet.save(outputStream);
-//			return outputStream;
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//			return null;
-//		}
-//	}
 
 }

@@ -1,4 +1,4 @@
-package com.zoidbergv.telegrambot;
+package com.zoidbergv.telegrambot.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -9,7 +9,7 @@ import com.zoidbergv.telegrambot.report.ReportService;
 
 @RestController
 public class ReportController {
-
+	
 	@Autowired
 	private ReportService reportService;
 

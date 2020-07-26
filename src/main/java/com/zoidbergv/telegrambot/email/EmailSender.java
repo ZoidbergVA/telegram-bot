@@ -3,6 +3,8 @@ package com.zoidbergv.telegrambot.email;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamSource;
 import org.springframework.mail.javamail.JavaMailSender;
@@ -11,6 +13,8 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class EmailSender {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(EmailSender.class);
 
 	@Autowired
 	private JavaMailSender emailSender;
@@ -28,7 +32,7 @@ public class EmailSender {
 
 			emailSender.send(message);
 		} catch (MessagingException e) {
-			e.printStackTrace();
+			LOGGER.error(e.getLocalizedMessage(), e.getCause());
 		}
 	}
 
