@@ -1,5 +1,6 @@
 package com.zoidbergv.telegrambot.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,14 @@ public class QuestionService {
 		Integer questionId = chat.getLastAnsweredQuestion() != null ? chat.getLastAnsweredQuestion().getId() : 0;
 		question = questionDAO.findById(questionId + 1);
 		return question;
+	}
+
+	public List<Question> getQuestions() {
+		return questionDAO.findAll();
+	}
+
+	public Optional<Question> getQuestionByText(String text) {
+		return questionDAO.findFirstByText(text);
 	}
 
 }

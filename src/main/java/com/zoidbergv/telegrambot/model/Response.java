@@ -3,7 +3,7 @@ package com.zoidbergv.telegrambot.model;
 public class Response {
 
 	private Integer number;
-	
+
 	private String text;
 
 	public Response(Integer number, String text) {
@@ -63,5 +63,5 @@ public class Response {
 	public String toString() {
 		return "Response [number=" + number + ", text=" + text + "]";
 	}
-		
+
 }

@@ -4,12 +4,16 @@ import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import com.zoidbergv.telegrambot.enums.ChatState;
 
 @Entity
 @Table(name = "chat")
@@ -33,10 +37,11 @@ public class Chat {
 
 	@Column(name = "user_name", nullable = true)
 	private String userName;
-	
-	@Column(name = "reported", nullable = false)
-	private Boolean reported;
-	
+
+	@Enumerated(EnumType.STRING)
+	@Column(name = "state", nullable = false)
+	private ChatState state;
+
 	public Long getId() {
 		return id;
 	}
@@ -85,12 +90,12 @@ public class Chat {
 		this.userName = userName;
 	}
 
-	public Boolean getReported() {
-		return reported;
+	public ChatState getState() {
+		return state;
 	}
 
-	public void setReported(Boolean reported) {
-		this.reported = reported;
+	public void setState(ChatState state) {
+		this.state = state;
 	}
 
 	@Override
@@ -121,7 +126,7 @@ public class Chat {
 	@Override
 	public String toString() {
 		return "Chat [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", userName=" + userName
-				+ ", reported=" + reported + "]";
+				+ ", state=" + state + "]";
 	}
 
 }

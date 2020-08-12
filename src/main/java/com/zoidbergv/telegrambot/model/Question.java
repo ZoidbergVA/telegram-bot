@@ -29,13 +29,13 @@ public class Question {
 	@Enumerated(EnumType.STRING)
 	@Column(name = "type", nullable = false)
 	private QuestionType type;
-	
+
 	@OneToMany(mappedBy = "lastAnsweredQuestion", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<Chat> currentChats;
-	
+
 	@OneToMany(mappedBy = "question", cascade = {}, fetch = FetchType.LAZY, orphanRemoval = true)
 	private Set<ChatAnswer> chatAnswers;
-	
+
 	public Integer getId() {
 		return id;
 	}

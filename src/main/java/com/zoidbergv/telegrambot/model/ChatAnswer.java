@@ -3,45 +3,47 @@ package com.zoidbergv.telegrambot.model;
 import java.time.LocalDateTime;
 
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
+
+import com.zoidbergv.telegrambot.service.ChatAnswerId;
 
 @Entity
 @Table(name = "chat_answer")
 public class ChatAnswer {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+	@EmbeddedId
+	private ChatAnswerId id;
 
+	@MapsId("chat_id")
 	@ManyToOne(cascade = {}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "chat_id", nullable = false)
 	private Chat chat;
 
+	@MapsId("question_id")
 	@ManyToOne(cascade = {}, fetch = FetchType.LAZY)
 	@JoinColumn(name = "question_id", nullable = false)
 	private Question question;
 
 	@Column(name = "answer_text", nullable = false)
 	private String text;
-	
+
 	@Column(name = "answer_weight", nullable = false)
 	private Integer weight;
-	
+
 	@Column(name = "date_created", nullable = false)
 	private LocalDateTime dateCreated;
 
-	public Integer getId() {
+	public ChatAnswerId getId() {
 		return id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(ChatAnswerId id) {
 		this.id = id;
 	}
 

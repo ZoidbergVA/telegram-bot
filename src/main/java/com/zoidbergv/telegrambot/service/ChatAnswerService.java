@@ -20,9 +20,13 @@ public class ChatAnswerService {
 	private ChatAnswerDAO chatAnswerDAO;
 
 	public void add(Chat chat, Question question, Response response) {
-		ChatAnswer chatAnswer = new ChatAnswer();
-		chatAnswer.setChat(chat);
-		chatAnswer.setQuestion(question);
+		ChatAnswer chatAnswer = chatAnswerDAO.findByChatAndQuestion(chat, question);
+		if (chatAnswer == null) {
+			chatAnswer = new ChatAnswer();
+			chatAnswer.setId(new ChatAnswerId(chat.getId(), question.getId()));
+			chatAnswer.setChat(chat);
+			chatAnswer.setQuestion(question);
+		}
 		chatAnswer.setText(response.getText());
 		chatAnswer.setWeight(response.getNumber());
 		chatAnswer.setDateCreated(LocalDateTime.now());

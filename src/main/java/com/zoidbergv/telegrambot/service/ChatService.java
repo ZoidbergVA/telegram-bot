@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.zoidbergv.telegrambot.dao.ChatDAO;
+import com.zoidbergv.telegrambot.dao.QuestionDAO;
+import com.zoidbergv.telegrambot.enums.ChatState;
 import com.zoidbergv.telegrambot.model.Chat;
 import com.zoidbergv.telegrambot.model.Question;
 
@@ -17,6 +19,9 @@ public class ChatService {
 
 	@Autowired
 	private ChatDAO chatDAO;
+
+	@Autowired
+	private QuestionDAO questionDAO;
 
 	public Optional<Chat> getChat(Long id) {
 		return chatDAO.findById(id);
@@ -28,28 +33,45 @@ public class ChatService {
 		chat.setFirstName(firstName);
 		chat.setLastName(lastName);
 		chat.setUserName(userName);
-		chat.setReported(false);
+		chat.setState(ChatState.ANSWERING);
 		return chatDAO.save(chat);
 	}
 
 	public Chat updateLastAnswered(Chat chat, Question question) {
 		chat.setLastAnsweredQuestion(question);
+		if (questionDAO.findFirstByOrderByIdDesc().get().equals(question)) {
+			chat.setState(ChatState.RETRY_SENT);
+		}
+		return chatDAO.save(chat);
+	}
+
+	public Chat updateState(Chat chat, ChatState state) {
+		chat.setState(state);
 		return chatDAO.save(chat);
 	}
 
 	public List<Chat> updateReported(List<Chat> chats) {
-		chats.stream().forEach(chat -> chat.setReported(true));
+		chats.stream().forEach(chat -> chat.setState(ChatState.REPORTED));
 		return chatDAO.saveAll(chats);
 	}
 
 	public Chat resetChat(Chat chat) {
 		chat.setLastAnsweredQuestion(null);
-		chat.setReported(false);
+		chat.setState(ChatState.ANSWERING);
 		return chatDAO.save(chat);
 	}
 
+	public Chat retryLastQuestion(Chat chat) {
+		Optional<Question> question = questionDAO.findById(chat.getLastAnsweredQuestion() != null
+				? (chat.getLastAnsweredQuestion().getId() != 1 ? chat.getLastAnsweredQuestion().getId() - 1 : 0)
+				: 0);
+		chat.setLastAnsweredQuestion(question.isPresent() ? question.get() : null);
+		return chatDAO.save(chat);
+
+	}
+
 	public List<Chat> getUnreportedChats() {
-		return chatDAO.findByReported(false);
+		return chatDAO.findByState(ChatState.FINISHED);
 	}
 
 }

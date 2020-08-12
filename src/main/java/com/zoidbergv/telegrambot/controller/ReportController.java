@@ -9,7 +9,7 @@ import com.zoidbergv.telegrambot.report.ReportService;
 
 @RestController
 public class ReportController {
-	
+
 	@Autowired
 	private ReportService reportService;
 
